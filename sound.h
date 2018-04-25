@@ -1,3 +1,8 @@
+//#define DEBUG
+
+// constant definitions
+#define SAMPLERATE 16000
+
 // header file for processing sound (WAV) f
 // define the wav header
 

@@ -1,19 +1,20 @@
 #include "sound.h"
 #include <stdio.h>
 #include <math.h>
+#include "comm.h"
 // function definition of displayBar()
 // this function opens the "test1.wav" file and read the second part (data) of 
 // the file. The samples should be in S16_LE format, and there are 16000 of
 // them. The function processes every 200 samples and calculate their RMS value
 // and renders this value as a vertical bar on terminal screen
 void displayBar(char filename[]){
-	FILE *fp;
-	short int samples[SAMPLERATE];
+	FILE *fp;			// File handler
+	short int samples[SAMPLERATE];	// For sample value to be generated
 	double sum_200, rms_80[80], dB;
 	int i, j;
 	WAVHeader myhdr;		// dummy header to skip over the reading from the file
-	fp = fopen(filename, "r");
-	if(fp == NULL){
+	fp = fopen(filename, "r");	// create a file to write
+	if(fp == NULL){			// file is successfully created
 		printf("Error opening the file!\n");
 		return;
 	}
@@ -30,13 +31,16 @@ void displayBar(char filename[]){
 		}
 		rms_80[i] = sqrt(sum_200/200);
 		dB = 20*log10(rms_80[i]);
-#ifdef DEBUG
+		
+#ifdef DEBUG	// Debug mode, just print out the rmsdB value
 		printf("RMS[%d] = %10.4f = %10.4fdB\n", i,  rms_80[i], dB);
-#else
-		// in order to display sound value in a screen, we need to use decibel
+#else		// in order to display sound value in a screen, we need to use decibel
 		bar(i, dB);
 #endif
 	}
+#ifdef COMM
+	sendToServer(rms_80);
+#endif
 }
 
 // function definition of dilayWAVheader()

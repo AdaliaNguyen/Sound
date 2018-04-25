@@ -1,12 +1,12 @@
-OBJ = main.o sound.o
+OBJ = main.o sound.o screen.o comm.o
 APPNAME = test.a
 TAR = final.tar
 
 $(APPNAME) : $(OBJ)	
-	gcc -o $(APPNAME) $(OBJ)
+	gcc -o $(APPNAME) $(OBJ) -lm -lcurl
 
 %.o : %.c
-	gcc -c -o $@ $<
+	gcc -c -o $@ $< 
 
 #main.o : main.c
 #	gcc -c main.c
